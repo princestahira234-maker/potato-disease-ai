@@ -10,7 +10,10 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("potato_disease_model.keras")
+    return tf.keras.models.load_model(
+        "potato_disease_model.keras",
+        compile=False
+    )
 
 model = load_model()
 
@@ -27,7 +30,11 @@ uploaded_file = st.file_uploader(
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
 
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+    st.image(
+        image,
+        caption="Uploaded Image",
+        use_container_width=True
+    )
 
     img = image.resize((224, 224))
     img = np.array(img).astype("float32") / 255.0
@@ -38,10 +45,5 @@ if uploaded_file is not None:
     predicted_class = class_names[np.argmax(prediction)]
     confidence = float(np.max(prediction)) * 100
 
-    st.success(
-        f"Prediction: {predicted_class}"
-    )
-
-    st.info(
-        f"Confidence: {confidence:.2f}%"
-    )
+    st.success(f"Prediction: {predicted_class}")
+    st.info(f"Confidence: {confidence:.2f}%")

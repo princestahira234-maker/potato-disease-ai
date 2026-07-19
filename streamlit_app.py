@@ -621,16 +621,12 @@ with col2:
                 f"{confidence:.1f}%"
             )
 
-        with summary_col3:
+       with summary_col3:
 
-                   else:
-
-            st.success(
-                """
-                Prediction confidence is high.
-                Results are considered reliable.
-                """
-            )
+    st.metric(
+        "Status",
+        "Analyzed"
+    )
 
 
 # ==================================================

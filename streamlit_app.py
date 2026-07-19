@@ -3,933 +3,938 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# ==================================================
+
+# ==============================
 # PAGE CONFIG
-# ==================================================
+# ==============================
 
 st.set_page_config(
     page_title="SmartFarm PotatoGuard AI",
     page_icon="🌾",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# ==================================================
-# CUSTOM CSS
-# ==================================================
+
+
+# ==============================
+# CSS DESIGN
+# ==============================
 
 st.markdown("""
 <style>
 
-#MainMenu {
-    visibility: hidden;
+.stApp{
+background:#F7FAF7;
 }
 
-footer {
-    visibility: hidden;
+
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
 }
 
-.stApp {
-    background-color: #F7FAF7;
+
+.hero{
+background:linear-gradient(
+135deg,
+#1B5E20,
+#43A047
+);
+padding:50px;
+border-radius:25px;
+color:white;
+text-align:center;
 }
 
-.block-container {
-    padding-top: 1rem;
-    padding-bottom: 2rem;
+
+.title{
+font-size:40px;
+font-weight:bold;
 }
 
-[data-testid="stSidebar"] {
-    background: #ffffff;
-    border-right: 1px solid #e5e7eb;
+
+.section-title{
+color:#1B5E20;
+font-size:30px;
+font-weight:bold;
 }
 
-.hero-section {
-    background: linear-gradient(
-        135deg,
-        #1B5E20,
-        #2E7D32,
-        #43A047
-    );
-    padding: 50px;
-    border-radius: 25px;
-    color: white;
-    text-align: center;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+.metric-card{
+
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+
 }
 
-.hero-title {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.hero-subtitle {
-    font-size: 1.1rem;
-    opacity: 0.95;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border: 1px solid #eef2f7;
-}
-
-.metric-card {
-    background: white;
-    padding: 25px;
-    border-radius: 18px;
-    text-align: center;
-    border: 1px solid #e8f5e9;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
-.metric-title {
-    color: #6b7280;
-    font-size: 14px;
-}
-
-.metric-value {
-    color: #2E7D32;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.section-title {
-    color: #1B5E20;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.feature-card {
-    background: white;
-    padding: 20px;
-    border-radius: 18px;
-    border-left: 5px solid #43A047;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-
-.badge {
-    background: #E8F5E9;
-    color: #1B5E20;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.footer-box {
-    text-align: center;
-    color: #6b7280;
-    margin-top: 50px;
-    font-size: 14px;
-}
 
 </style>
 """, unsafe_allow_html=True)
 
-# ==================================================
+
+
+# ==============================
 # LOAD MODEL
-# ==================================================
+# ==============================
+
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model(
+
+    model = tf.keras.models.load_model(
         "potato_disease_model.keras",
         compile=False
     )
 
+    return model
+
+
+
 model = load_model()
 
+
+
 class_names = [
-    "Early Blight",
-    "Late Blight",
-    "Healthy"
+
+"Early Blight",
+"Late Blight",
+"Healthy"
+
 ]
 
-# ==================================================
-# SIDEBAR
-# ==================================================
 
-st.sidebar.image(
-    "https://img.icons8.com/color/96/potato.png",
-    width=90
-)
+
+# ==============================
+# SIDEBAR
+# ==============================
+
 
 st.sidebar.title("🌾 SmartFarm")
 
-st.sidebar.markdown(
-    """
-    <div class='badge'>
-    PotatoGuard AI
-    </div>
-    """,
-    unsafe_allow_html=True
+st.sidebar.write(
+"PotatoGuard AI"
 )
 
-st.sidebar.markdown("---")
 
 page = st.sidebar.radio(
-    "Navigation",
-    [
-        "🏠 Home",
-        "🔍 Detection",
-        "📚 Disease Guide",
-        "ℹ️ About"
-    ]
+
+"Navigation",
+
+[
+"🏠 Home",
+"🔍 Detection",
+"📚 Disease Guide",
+"ℹ️ About"
+]
+
 )
 
-st.sidebar.markdown("---")
 
-st.sidebar.success(
-    "AI Agriculture Assistant"
-)
 
-# ==================================================
+# ==============================
 # HOME PAGE
-# ==================================================
+# ==============================
+
 
 if page == "🏠 Home":
 
+
+
     st.markdown("""
-    <div class="hero-section">
-        <div class="hero-title">
-            🌾 SmartFarm PotatoGuard AI
-        </div>
+    <div class="hero">
 
-        <div class="hero-subtitle">
-            Intelligent Potato Disease Detection System
-            powered by Deep Learning and Computer Vision
-        </div>
+    <div class="title">
+    🌾 SmartFarm PotatoGuard AI
     </div>
-    """, unsafe_allow_html=True)
 
-    col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">
-                Disease Classes
-            </div>
-            <div class="metric-value">
-                3
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    <p>
+    Intelligent Potato Disease Detection
+    using Deep Learning
+    </p>
 
-    with col2:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">
-                AI Model
-            </div>
-            <div class="metric-value">
-                CNN
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
 
-    with col3:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">
-                Input Size
-            </div>
-            <div class="metric-value">
-                224×224
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
 
-    with col4:
-        st.markdown("""
-        <div class="metric-card">
-            <div class="metric-title">
-                Status
-            </div>
-            <div class="metric-value">
-                Active
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-
-    left, right = st.columns(2)
-
-    with left:
-
-        st.markdown("""
-        <div class="feature-card">
-        <h3>🚀 Why Use PotatoGuard AI?</h3>
-
-        ✅ Early Disease Detection
-
-        ✅ Faster Decision Making
-
-        ✅ Reduced Crop Loss
-
-        ✅ AI-Based Analysis
-
-        ✅ Farmer Friendly Interface
-
-        ✅ Real-Time Predictions
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    with right:
-
-        st.markdown("""
-        <div class="feature-card">
-        <h3>🎯 Supported Categories</h3>
-
-        • Early Blight
-
-        • Late Blight
-
-        • Healthy Leaves
-
-        Detect diseases at an early stage and
-        improve crop productivity.
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-
-    st.markdown(
-        "<h2 class='section-title'>🌱 Smart Agriculture Solution</h2>",
-        unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True
     )
 
-    st.markdown("""
+
+
+    st.write("")
+
+
+
+    c1,c2,c3,c4 = st.columns(4)
+
+
+
+    with c1:
+
+        st.metric(
+        "Disease Classes",
+        "3"
+        )
+
+
+    with c2:
+
+        st.metric(
+        "AI Model",
+        "CNN"
+        )
+
+
+    with c3:
+
+        st.metric(
+        "Image Size",
+        "224x224"
+        )
+
+
+    with c4:
+
+        st.metric(
+        "Status",
+        "Active"
+        )
+
+
+
+    st.write("")
+
+
+
+    st.markdown(
+    """
     <div class="card">
 
-    SmartFarm PotatoGuard AI uses advanced
-    Deep Learning techniques to analyze
-    potato leaf images and identify diseases
-    with high confidence.
+    ## 🚀 Features
 
-    This solution is designed for:
 
-    • Farmers
+    ✅ Early Disease Detection
 
-    • Agriculture Companies
 
-    • Researchers
+    ✅ AI Based Prediction
 
-    • NGOs
 
-    • Government Agriculture Departments
+    ✅ Confidence Score
+
+
+    ✅ Disease Management Guide
+
+
+    ✅ Farmer Friendly System
+
 
     </div>
-    """, unsafe_allow_html=True)
-    # ==================================================
+
+    """,
+    unsafe_allow_html=True
+    )
+# ==============================
 # DETECTION PAGE
-# ==================================================
+# ==============================
+
 
 elif page == "🔍 Detection":
 
+
     st.markdown(
-        """
-        <h2 class='section-title'>
-        🔍 AI Disease Detection Dashboard
-        </h2>
-        """,
-        unsafe_allow_html=True
+    """
+    <h2 class="section-title">
+    🔍 AI Disease Detection
+    </h2>
+    """,
+    unsafe_allow_html=True
     )
 
-    st.markdown("""
+
+    st.markdown(
+    """
     <div class="card">
-    Upload a clear image of a potato leaf and let
-    SmartFarm PotatoGuard AI analyze the plant
-    health using Deep Learning.
+
+    Upload potato leaf image and AI model
+    will detect disease automatically.
+
     </div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+    )
+
+
 
     uploaded_file = st.file_uploader(
+
         "📤 Upload Potato Leaf Image",
-        type=["jpg", "jpeg", "png"]
+
+        type=[
+            "jpg",
+            "jpeg",
+            "png"
+        ]
+
     )
 
+
+
     if uploaded_file is not None:
+
+
 
         image = Image.open(
             uploaded_file
         ).convert("RGB")
 
-        col1, col2 = st.columns([1, 1])
 
-        # ==========================================
-        # IMAGE PREVIEW
-        # ==========================================
+
+        col1,col2 = st.columns(2)
+
+
+
+        # ======================
+        # IMAGE DISPLAY
+        # ======================
+
 
         with col1:
 
-            st.markdown("""
+
+            st.markdown(
+            """
             <div class="card">
-            <h3>📷 Uploaded Image</h3>
+
+            📷 Uploaded Image
+
             </div>
-            """, unsafe_allow_html=True)
+            """,
+            unsafe_allow_html=True
+            )
+
 
             st.image(
                 image,
-                caption="Potato Leaf",
                 use_container_width=True
             )
 
-        # ==========================================
-        # MODEL PREDICTION
-        # ==========================================
 
-        img = image.resize((224, 224))
+
+
+        # ======================
+        # MODEL PREDICTION
+        # ======================
+
+
+        img = image.resize(
+            (224,224)
+        )
+
 
         img = np.array(
             img
-        ).astype("float32") / 255.0
+        )
+
+
+        img = img.astype(
+            "float32"
+        ) / 255.0
+
+
 
         img = np.expand_dims(
             img,
             axis=0
         )
 
+
+
         prediction = model.predict(
             img,
             verbose=0
         )
 
-        predicted_class = class_names[
-            np.argmax(prediction)
-        ]
+
+
+        index = np.argmax(
+            prediction
+        )
+
+
+        predicted_class = class_names[index]
+
 
         confidence = float(
             np.max(prediction)
         ) * 100
 
-        # ==========================================
-        # RESULT PANEL
-        # ==========================================
-
-       
-
-         
 
 
-with col2:
 
-    st.markdown("""
-    <div class="card">
-    <h3>🤖 AI Prediction Result</h3>
-    </div>
-    """, unsafe_allow_html=True)
 
-    if predicted_class == "Healthy":
+        # ======================
+        # RESULT DISPLAY
+        # ======================
 
-        st.success(
-            "✅ Healthy Plant Detected"
-        )
 
-        severity = "Very Low"
+        with col2:
 
-    elif predicted_class == "Early Blight":
 
-        st.warning(
-            "⚠️ Early Blight Detected"
-        )
 
-        severity = "Moderate"
+            st.markdown(
+            """
+            <div class="card">
 
-    else:
+            🤖 AI Prediction Result
 
-        st.error(
-            "🚨 Late Blight Detected"
-        )
+            </div>
+            """,
+            unsafe_allow_html=True
+            )
 
-        severity = "High"
 
-    st.metric(
-        "Prediction",
-        predicted_class
-    )
 
-    st.metric(
-        "Confidence Score",
-        f"{confidence:.2f}%"
-    )
+            if predicted_class == "Healthy":
 
-    st.progress(
-        int(confidence)
-    )
 
-    # Confidence Quality Indicator
+                st.success(
+                "✅ Healthy Plant Detected"
+                )
 
-    if confidence >= 85:
 
-        st.success(
-            "✅ High confidence prediction"
-        )
+                severity = "Low"
 
-    elif confidence >= 70:
 
-        st.warning(
-            "⚠️ Moderate confidence prediction"
-        )
 
-    else:
+            elif predicted_class == "Early Blight":
 
-        st.error(
-            "❌ Low confidence prediction. Please upload a clearer image."
-        )
 
-    st.write("")
-    st.markdown("""
-    <div class="card">
-    <h4>📊 Disease Severity</h4>
-    </div>
-    """, unsafe_allow_html=True)
+                st.warning(
+                "⚠️ Early Blight Detected"
+                )
 
-    if severity == "Very Low":
 
-        st.success(
-            f"Severity Level: {severity}"
-        )
+                severity = "Medium"
 
-    elif severity == "Moderate":
 
-        st.warning(
-            f"Severity Level: {severity}"
-        )
 
-    else:
+            else:
 
-        st.error(
-            f"Severity Level: {severity}"
-        )
 
-        # ==========================================
+                st.error(
+                "🚨 Late Blight Detected"
+                )
+
+
+                severity = "High"
+
+
+
+
+
+            st.metric(
+
+                "Prediction",
+
+                predicted_class
+
+            )
+
+
+
+            st.metric(
+
+                "Confidence",
+
+                f"{confidence:.2f}%"
+
+            )
+
+
+
+            st.progress(
+                int(confidence)
+            )
+
+
+
+
+            if confidence >= 85:
+
+
+                st.success(
+                "High Confidence Prediction"
+                )
+
+
+
+            elif confidence >=70:
+
+
+                st.warning(
+                "Moderate Confidence Prediction"
+                )
+
+
+
+            else:
+
+
+                st.error(
+                "Low Confidence - Upload Clear Image"
+                )
+
+
+
+
+
+            st.write("")
+
+
+
+            st.subheader(
+            "📊 Disease Severity"
+            )
+
+
+
+            if severity=="Low":
+
+                st.success(
+                severity
+                )
+
+
+            elif severity=="Medium":
+
+                st.warning(
+                severity
+                )
+
+
+            else:
+
+                st.error(
+                severity
+                )
+
+
+
+
+        # ======================
         # RECOMMENDATIONS
-        # ==========================================
+        # ======================
+
 
         st.write("")
 
-        st.markdown("""
-        <h2 class='section-title'>
+        st.markdown(
+        """
+        <h2 class="section-title">
         🌱 Recommended Actions
         </h2>
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+        )
 
-        if predicted_class == "Healthy":
 
-            st.markdown("""
-            <div class="card">
 
-            ### ✅ Plant Appears Healthy
 
-            Recommended Practices:
+        if predicted_class=="Healthy":
 
-            • Continue regular monitoring
 
-            • Maintain proper irrigation
+            st.info(
+            """
+            ✅ Plant is healthy.
 
-            • Apply balanced fertilization
+            • Continue monitoring
 
-            • Monitor for pest activity
+            • Maintain irrigation
 
-            • Ensure proper field sanitation
+            • Keep field clean
 
-            </div>
-            """, unsafe_allow_html=True)
+            """
+            )
 
-        elif predicted_class == "Early Blight":
 
-            st.markdown("""
-            <div class="card">
 
-            ### ⚠️ Early Blight Management
+        elif predicted_class=="Early Blight":
 
-            Recommended Actions:
+
+            st.warning(
+            """
+            ⚠️ Early Blight Management:
 
             • Remove infected leaves
 
             • Improve air circulation
 
-            • Avoid overhead irrigation
-
-            • Apply recommended fungicides
+            • Apply suitable fungicide
 
             • Monitor nearby plants
 
-            • Follow crop rotation practices
+            """
+            )
 
-            </div>
-            """, unsafe_allow_html=True)
 
-        elif predicted_class == "Late Blight":
 
-            st.markdown("""
-            <div class="card">
+        else:
 
-            ### 🚨 Late Blight Management
 
-            Immediate Actions:
+            st.error(
+            """
+            🚨 Late Blight Management:
 
-            • Isolate affected plants
+            • Remove infected plants
 
-            • Apply fungicide immediately
+            • Apply fungicide quickly
 
-            • Remove severely infected leaves
+            • Check surrounding crops
 
-            • Inspect neighboring plants
+            """
+            )
 
-            • Improve drainage conditions
 
-            • Monitor crop daily
 
-            </div>
-            """, unsafe_allow_html=True)
 
-        # ==========================================
-        # AI ANALYSIS SUMMARY
-        # ==========================================
+        # ======================
+        # SUMMARY
+        # ======================
+
 
         st.write("")
 
-        st.markdown("""
-        <h2 class='section-title'>
-        📋 AI Analysis Summary
-        </h2>
-        """, unsafe_allow_html=True)
 
-        summary_col1, summary_col2, summary_col3 = st.columns(3)
-
-        with summary_col1:
-
-            st.metric(
-                "Detected Class",
-                predicted_class
-            )
-
-        with summary_col2:
-
-            st.metric(
-                "Confidence",
-                f"{confidence:.1f}%"
-            )
-
-        with summary_col3:
-
-    st.metric(
-        "Status",
-        "Analyzed"
-    )
-
-
-# ==================================================
-# DISEASE GUIDE PAGE
-# ==================================================
-
-elif page == "📚 Disease Guide":
-
-    st.markdown(
+        st.markdown(
         """
-        <h2 class='section-title'>
-        📚 Potato Disease Guide
+        <h2 class="section-title">
+        📋 AI Analysis Summary
         </h2>
         """,
         unsafe_allow_html=True
+        )
+
+
+
+        s1,s2,s3 = st.columns(3)
+
+
+
+        with s1:
+
+            st.metric(
+            "Disease",
+            predicted_class
+            )
+
+
+
+        with s2:
+
+            st.metric(
+            "Accuracy",
+            f"{confidence:.1f}%"
+            )
+
+
+
+        with s3:
+
+            st.metric(
+            "Status",
+            "Completed"
+            )
+            # ==============================
+# DISEASE GUIDE PAGE
+# ==============================
+
+
+elif page == "📚 Disease Guide":
+
+
+    st.markdown(
+    """
+    <h2 class="section-title">
+    📚 Potato Disease Guide
+    </h2>
+    """,
+    unsafe_allow_html=True
     )
 
-    # ==========================================
-    # EARLY BLIGHT
-    # ==========================================
 
-    st.markdown("""
+
+    st.markdown(
+    """
     <div class="card">
-    <h2>🟠 Early Blight</h2>
 
-    <h4>Symptoms</h4>
+    ## 🟠 Early Blight
+
+
+    ### Symptoms
 
     • Brown circular spots on leaves
 
-    • Concentric ring pattern
+    • Yellowing around infected area
 
-    • Yellowing around lesions
+    • Leaf dropping
 
-    • Premature leaf drop
 
-    <h4>Causes</h4>
+
+    ### Causes
 
     • Alternaria fungus
 
-    • Warm and humid weather
+    • Warm humid conditions
 
-    • Poor crop management
+    • Poor field management
 
-    <h4>Prevention</h4>
+
+
+    ### Prevention
 
     • Crop rotation
 
-    • Proper spacing
-
-    • Field sanitation
-
-    • Balanced fertilization
-
-    <h4>Treatment</h4>
-
     • Remove infected leaves
 
-    • Use recommended fungicides
+    • Maintain plant spacing
+
+
+
+    ### Treatment
+
+    • Apply recommended fungicide
 
     • Improve air circulation
 
+
     </div>
-    """, unsafe_allow_html=True)
+
+    """,
+    unsafe_allow_html=True
+    )
+
+
 
     st.write("")
 
-    # ==========================================
-    # LATE BLIGHT
-    # ==========================================
 
-    st.markdown("""
+
+    st.markdown(
+    """
     <div class="card">
-    <h2>🔴 Late Blight</h2>
 
-    <h4>Symptoms</h4>
 
-    • Water-soaked lesions
+    ## 🔴 Late Blight
 
-    • Rapid disease spread
 
-    • Dark brown leaf patches
+    ### Symptoms
 
-    • White fungal growth
+    • Dark brown patches
 
-    <h4>Causes</h4>
+    • Water soaked lesions
+
+    • Fast disease spreading
+
+
+
+    ### Causes
 
     • Phytophthora infestans
 
-    • Cool and humid weather
+    • High humidity
 
-    • Excessive moisture
+    • Excess moisture
 
-    <h4>Prevention</h4>
 
-    • Disease-free seed selection
+
+    ### Prevention
+
+    • Healthy seed selection
 
     • Proper drainage
 
     • Regular monitoring
 
-    • Preventive spraying
 
-    <h4>Treatment</h4>
+
+    ### Treatment
 
     • Immediate fungicide application
 
     • Remove infected plants
 
-    • Isolate affected areas
 
     </div>
-    """, unsafe_allow_html=True)
+
+    """,
+    unsafe_allow_html=True
+    )
+
+
 
     st.write("")
 
-    # ==========================================
-    # HEALTHY PLANT
-    # ==========================================
 
-    st.markdown("""
+
+    st.markdown(
+    """
     <div class="card">
-    <h2>🟢 Healthy Plant</h2>
 
-    <h4>Healthy Indicators</h4>
 
-    • Uniform green color
+    ## 🟢 Healthy Potato Plant
 
-    • No visible lesions
 
-    • Strong leaf structure
+    ### Indicators
 
-    • Healthy growth pattern
 
-    <h4>Best Practices</h4>
+    • Green leaves
 
-    • Balanced nutrition
+    • No spots
+
+    • Strong growth
+
+
+    ### Best Practices
+
+
+    • Balanced fertilizer
 
     • Proper irrigation
 
-    • Routine field inspection
+    • Regular inspection
 
-    • Integrated pest management
-
-    <h4>Maintenance</h4>
-
-    • Monitor crop health regularly
-
-    • Maintain soil fertility
-
-    • Remove weeds promptly
 
     </div>
-    """, unsafe_allow_html=True)
 
-# ==================================================
+    """,
+    unsafe_allow_html=True
+    )
+
+
+
+
+
+# ==============================
 # ABOUT PAGE
-# ==================================================
+# ==============================
+
 
 elif page == "ℹ️ About":
 
+
     st.markdown(
-        """
-        <h2 class='section-title'>
-        ℹ️ About SmartFarm PotatoGuard AI
-        </h2>
-        """,
-        unsafe_allow_html=True
+    """
+    <h2 class="section-title">
+    ℹ️ About SmartFarm PotatoGuard AI
+    </h2>
+
+    """,
+    unsafe_allow_html=True
     )
 
-    st.markdown("""
+
+
+    st.markdown(
+    """
     <div class="card">
 
-    <h3>🌾 Project Overview</h3>
 
-    SmartFarm PotatoGuard AI is an intelligent
-    agriculture solution designed to detect
-    potato leaf diseases using Artificial
-    Intelligence, Deep Learning and Computer Vision.
+    ## 🌾 Project Overview
 
-    The platform assists farmers, researchers,
-    agricultural organizations and extension
-    services in identifying diseases early and
-    reducing crop losses.
 
-    </div>
-    """, unsafe_allow_html=True)
+    SmartFarm PotatoGuard AI is an AI based
+    agriculture system designed to detect
+    potato leaf diseases using Deep Learning
+    and Computer Vision.
 
-    st.write("")
 
-    st.markdown("""
-    <div class="card">
 
-    <h3>🤖 AI Technology</h3>
+    ## 🤖 Technology
 
-    The system uses a Convolutional Neural Network (CNN)
-    trained on potato leaf images.
 
-    Workflow:
+    The system uses:
 
-    1. Upload potato leaf image
+    • Convolutional Neural Network (CNN)
 
-    2. Image preprocessing
+    • Image Processing
 
-    3. Deep learning analysis
+    • Deep Learning Classification
 
-    4. Disease classification
+    • Confidence Score Analysis
 
-    5. Confidence score generation
 
-    6. Recommendation output
 
-    </div>
-    """, unsafe_allow_html=True)
+    ## 🚀 Benefits
 
-    st.write("")
 
-    col1, col2 = st.columns(2)
+    ✅ Early disease detection
 
-    with col1:
+    ✅ Reduced crop loss
 
-        st.markdown("""
-        <div class="card">
+    ✅ Faster decisions
 
-        <h3>🚀 Benefits for Farmers</h3>
+    ✅ Farmer friendly interface
 
-        • Early disease detection
 
-        • Reduced crop losses
-
-        • Faster decision making
-
-        • Better disease management
-
-        • Increased productivity
-
-        • Cost-effective monitoring
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-
-        st.markdown("""
-        <div class="card">
-
-        <h3>📈 Future Roadmap</h3>
-
-        • Multi-crop disease detection
-
-        • Mobile application
-
-        • Cloud-based analytics
-
-        • IoT integration
-
-        • Real-time monitoring
-
-        • Advanced reporting
-
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-
-    st.markdown("""
-    <div class="card">
-
-    <h3>🏆 System Features</h3>
-
-    ✅ Deep Learning Based Detection
-
-    ✅ Smart Disease Identification
-
-    ✅ Confidence Score Reporting
-
-    ✅ User Friendly Dashboard
-
-    ✅ Streamlit Cloud Deployment
-
-    ✅ Agriculture-Focused Design
 
     </div>
-    """, unsafe_allow_html=True)
 
-# ==================================================
+    """,
+    unsafe_allow_html=True
+    )
+
+
+
+
+
+# ==============================
 # FOOTER
-# ==================================================
+# ==============================
+
 
 st.write("")
-st.write("")
 
-st.markdown("""
-<div class="footer-box">
+st.markdown(
+"""
+<div style="
+text-align:center;
+color:#6b7280;
+margin-top:50px;
+">
+
 
 <hr>
 
-<h4>🌾 SmartFarm PotatoGuard AI</h4>
+
+<h4>
+🌾 SmartFarm PotatoGuard AI
+</h4>
+
 
 Intelligent Potato Disease Detection System
 
+
+<br>
+
+
 Powered by Deep Learning & Computer Vision
+
+
+<br><br>
+
 
 © 2026 Smart Agriculture Initiative
 
+
 </div>
-""", unsafe_allow_html=True)
+
+""",
+unsafe_allow_html=True
+)
+              
+            

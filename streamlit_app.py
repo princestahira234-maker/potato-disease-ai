@@ -623,22 +623,7 @@ with col2:
 
         with summary_col3:
 
-            st.metric(
-                "Risk Level",
-                severity
-            )
-
-        if confidence < 70:
-
-            st.warning(
-                """
-                Low confidence prediction detected.
-                Please upload a clearer image
-                with proper lighting conditions.
-                """
-            )
-
-        else:
+                   else:
 
             st.success(
                 """
@@ -646,7 +631,9 @@ with col2:
                 Results are considered reliable.
                 """
             )
-            # ==================================================
+
+
+# ==================================================
 # DISEASE GUIDE PAGE
 # ==================================================
 

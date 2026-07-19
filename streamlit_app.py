@@ -621,7 +621,7 @@ with col2:
                 f"{confidence:.1f}%"
             )
 
-       with summary_col3:
+        with summary_col3:
 
     st.metric(
         "Status",

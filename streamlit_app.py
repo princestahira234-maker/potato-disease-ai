@@ -415,75 +415,102 @@ elif page == "🔍 Detection":
         # RESULT PANEL
         # ==========================================
 
-        with col2:
+       
 
-            st.markdown("""
-            <div class="card">
-            <h3>🤖 AI Prediction Result</h3>
-            </div>
-            """, unsafe_allow_html=True)
+         
 
-            if predicted_class == "Healthy":
 
-                st.success(
-                    "✅ Healthy Plant Detected"
-                )
+with col2:
 
-                severity = "Very Low"
+    st.markdown("""
+    <div class="card">
+    <h3>🤖 AI Prediction Result</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
-            elif predicted_class == "Early Blight":
+    if predicted_class == "Healthy":
 
-                st.warning(
-                    "⚠️ Early Blight Detected"
-                )
+        st.success(
+            "✅ Healthy Plant Detected"
+        )
 
-                severity = "Moderate"
+        severity = "Very Low"
 
-            else:
+    elif predicted_class == "Early Blight":
 
-                st.error(
-                    "🚨 Late Blight Detected"
-                )
+        st.warning(
+            "⚠️ Early Blight Detected"
+        )
 
-                severity = "High"
+        severity = "Moderate"
 
-            st.metric(
-                "Prediction",
-                predicted_class
-            )
+    else:
 
-            st.metric(
-                "Confidence Score",
-                f"{confidence:.2f}%"
-            )
+        st.error(
+            "🚨 Late Blight Detected"
+        )
 
-            st.progress(
-    int(confidence)
-)
+        severity = "High"
 
-# Confidence Quality Indicator
+    st.metric(
+        "Prediction",
+        predicted_class
+    )
 
-if confidence >= 85:
-    st.success("High confidence prediction")
+    st.metric(
+        "Confidence Score",
+        f"{confidence:.2f}%"
+    )
 
-elif confidence >= 70:
-    st.warning("Moderate confidence prediction")
+    st.progress(
+        int(confidence)
+    )
 
-else:
-    st.error("Low confidence prediction")
+    # Confidence Quality Indicator
 
-st.write("")   # ✅ no extra spaces
-                st.markdown("""
-            <div class="card">
-            <h4>📊 Disease Severity</h4>
-            </div>
-            """, unsafe_allow_html=True)
+    if confidence >= 85:
 
-            if severity == "Very Low":
+        st.success(
+            "✅ High confidence prediction"
+        )
 
-                st.success(
-                    f"Severity Level: {severity}"
-                )
+    elif confidence >= 70:
+
+        st.warning(
+            "⚠️ Moderate confidence prediction"
+        )
+
+    else:
+
+        st.error(
+            "❌ Low confidence prediction. Please upload a clearer image."
+        )
+
+    st.write("")
+
+    st.markdown("""
+    <div class="card">
+    <h4>📊 Disease Severity</h4>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if severity == "Very Low":
+
+        st.success(
+            f"Severity Level: {severity}"
+        )
+
+    elif severity == "Moderate":
+
+        st.warning(
+            f"Severity Level: {severity}"
+        )
+
+    else:
+
+        st.error(
+            f"Severity Level: {severity}"
+        )
 
             elif severity == "Moderate":
 

@@ -458,9 +458,6 @@ elif page == "🔍 Detection":
             )
 
             st.progress(
-                int(confidence)
-            )
-            st.progress(
     int(confidence)
 )
 

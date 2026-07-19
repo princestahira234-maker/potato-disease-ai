@@ -467,24 +467,15 @@ elif page == "🔍 Detection":
 # Confidence Quality Indicator
 
 if confidence >= 85:
-
-    st.success(
-        "✅ High confidence prediction"
-    )
+    st.success("High confidence prediction")
 
 elif confidence >= 70:
-
-    st.warning(
-        "⚠️ Moderate confidence prediction"
-    )
+    st.warning("Moderate confidence prediction")
 
 else:
+    st.error("Low confidence prediction")
 
-    st.error(
-        "❌ Low confidence prediction. Please upload a clearer image."
-    )
-
-            st.write("")
+st.write("")   # ✅ no extra spaces
 
             st.markdown("""
             <div class="card">

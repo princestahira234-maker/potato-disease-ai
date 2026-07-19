@@ -460,6 +460,29 @@ elif page == "🔍 Detection":
             st.progress(
                 int(confidence)
             )
+            st.progress(
+    int(confidence)
+)
+
+# Confidence Quality Indicator
+
+if confidence >= 85:
+
+    st.success(
+        "✅ High confidence prediction"
+    )
+
+elif confidence >= 70:
+
+    st.warning(
+        "⚠️ Moderate confidence prediction"
+    )
+
+else:
+
+    st.error(
+        "❌ Low confidence prediction. Please upload a clearer image."
+    )
 
             st.write("")
 

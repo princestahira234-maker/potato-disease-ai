@@ -487,7 +487,6 @@ with col2:
         )
 
     st.write("")
-
     st.markdown("""
     <div class="card">
     <h4>📊 Disease Severity</h4>
@@ -511,18 +510,6 @@ with col2:
         st.error(
             f"Severity Level: {severity}"
         )
-
-            elif severity == "Moderate":
-
-                st.warning(
-                    f"Severity Level: {severity}"
-                )
-
-            else:
-
-                st.error(
-                    f"Severity Level: {severity}"
-                )
 
         # ==========================================
         # RECOMMENDATIONS

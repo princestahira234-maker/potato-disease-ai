@@ -474,7 +474,7 @@ else:
 
 st.write("")   # ✅ no extra spaces
 
-            st.markdown("""
+     st.markdown("""
             <div class="card">
             <h4>📊 Disease Severity</h4>
             </div>

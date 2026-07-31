@@ -8,6 +8,8 @@
 ![Streamlit](https://img.shields.io/badge/Deployment-Streamlit-brightgreen)
 
 ---
+Live Demo:
+https://potato-disease-ai-myfiddjqngfpmmyegeddit.streamlit.app/
 
 # 📌 Project Overview
 
